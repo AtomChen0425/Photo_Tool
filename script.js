@@ -87,8 +87,8 @@ document.getElementById('addDominantColor').addEventListener('click', () => {
 
 document.getElementById('saveImage').addEventListener('click', () => {
     const link = document.createElement('a');
-    link.download = 'processed_image.png';
-    link.href = canvas.toDataURL();
+    link.download = 'processed_image.jpeg';
+    link.href = canvas.toDataURL("image/jpeg", 1.0);
     link.click();
 });
 
