@@ -1,10 +1,12 @@
 const imageUploader = document.getElementById('imageUploader');
-const canvas = document.getElementById('canvas');
+// const canvas = document.getElementById('canvas');
+const canvas =document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 const borderSizeInput = document.getElementById('newWidth');
 const borderSizeInput2 = document.getElementById('newHeight');
 const borderColorInput = document.getElementById('borderColor');
 const borderRadiusInput = document.getElementById('borderRadius');
+var result;
 var parameterDict;
 
 var newWidth=7000;
@@ -45,6 +47,7 @@ imageUploader.addEventListener('change', (event) => {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
+                result=canvasToImage()
                 parameterDict= await getImgExif(img);
                 console.log(parameterDict);
                 if (parameterDict.DateTimeOriginal) {
@@ -88,10 +91,23 @@ document.getElementById('addDominantColor').addEventListener('click', () => {
 document.getElementById('saveImage').addEventListener('click', () => {
     const link = document.createElement('a');
     link.download = 'processed_image.jpeg';
-    link.href = canvas.toDataURL("image/jpeg", 1.0);
+    // link.href = canvas.toDataURL("image/jpeg", 1.0);
+    link.href=result.src;
     link.click();
 });
-
+function canvasToImage() {
+    //新Image对象，可以理解为DOM
+    var image1 = new Image();
+    // canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持
+    // 指定格式 PNG
+    image1.src = canvas.toDataURL("image/jpeg", 1.0);
+    let code = document.getElementById("imageContainer")
+    while (code.firstChild) {
+        code.removeChild(code.firstChild);
+    }
+    code.appendChild(image1);//img加入到要插入的容器id
+    return image1;
+}
 function addWhiteBorder() {
     resetImage()
     // const newWidth = canvas.width + borderSize;
@@ -110,6 +126,7 @@ function addWhiteBorder() {
     canvas.width = newWidth;
     canvas.height = newHeight;
     ctx.drawImage(tempCanvas, 0, 0);
+    result=canvasToImage()
 }
 
 function addBlurredBackground() {
@@ -133,7 +150,7 @@ function addBlurredBackground() {
     canvas.height = newHeight;
     ctx.drawImage(tempCanvas,(tempCanvas.width-newWidth) / 2, (tempCanvas.height-newHeight) / 2,newWidth,newHeight,0,0,newWidth,newHeight);
     ctx.drawImage(img, (newWidth-originWidth) / 2, (newHeight-originalHeight) / 2);
-
+    result=canvasToImage()
     
 }
 
@@ -168,6 +185,7 @@ function addDominantColorBackground() {
     canvas.width = newWidth;
     canvas.height = newHeight;
     ctx.drawImage(tempCanvas, 0, 0);
+    result=canvasToImage()
 }
 async function getImgExif(imageFile) {
     return new Promise((resolve) => {
@@ -252,7 +270,11 @@ function generateImage() {
         const logoHeight = logo.height * scale;
     
         ctx.drawImage(logo, width - shooting_parameter_text_width - Math.floor(70*self_adative_roit) -Math.floor(watermarkHeight*0.2)-Math.floor(logoWidth), height + Math.floor(watermarkHeight *0.2) , logoWidth, logoHeight);
+        console.log('draw logo')
+        console.log(logo.src)
+        result=canvasToImage()
     };
+    
     // await new Promise((resolve) => {
     //     logo.onload = resolve;
     // });
@@ -260,6 +282,7 @@ function generateImage() {
     // const logoWidth = logo.width * scale;
     // const logoHeight = logo.height * scale;
     // ctx.drawImage(logo, width - shooting_parameter_text_width - Math.floor(70*self_adative_roit) -Math.floor(watermarkHeight*0.9), height + Math.floor(watermarkHeight *0.2) , logoWidth, logoHeight);
+    
 }
 
 
