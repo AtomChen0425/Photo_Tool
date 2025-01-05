@@ -1,16 +1,22 @@
 const imageUploader = document.getElementById('imageUploader');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const borderSizeInput = document.getElementById('borderSize');
+const borderSizeInput = document.getElementById('newWidth');
+const borderSizeInput2 = document.getElementById('newHeight');
 const borderColorInput = document.getElementById('borderColor');
 const borderRadiusInput = document.getElementById('borderRadius');
 var parameterDict;
 
-var borderSize=100;
+var newWidth=7000;
+var newHeight=7000;
 var borderColor="#ffffff";
 var borderRadius=40;
 borderSizeInput.addEventListener('input', () => {
-    borderSize = Number(borderSizeInput.value) || 100; 
+    newWidth = Number(borderSizeInput.value) || 7000; 
+});
+
+borderSizeInput2.addEventListener('input', () => {
+    newHeight = Number(borderSizeInput2.value) || 7000; 
 });
 
 borderColorInput.addEventListener('input', () => {
@@ -87,8 +93,8 @@ document.getElementById('saveImage').addEventListener('click', () => {
 
 function addWhiteBorder() {
     resetImage()
-    const newWidth = canvas.width + borderSize;
-    const newHeight = canvas.height + borderSize;
+    // const newWidth = canvas.width + borderSize;
+    // const newHeight = canvas.height + borderSize;
 
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
@@ -97,7 +103,7 @@ function addWhiteBorder() {
 
     tempCtx.fillStyle = borderColor;
     tempCtx.fillRect(0, 0, newWidth, newHeight);
-    tempCtx.drawImage(canvas, borderSize/2, borderSize/2);
+    tempCtx.drawImage(canvas, (newWidth-img.width)/2, (newHeight-img.height)/2);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.width = newWidth;
@@ -117,10 +123,16 @@ function addBlurredBackground() {
     tempCtx.filter = `blur(${borderRadius}px)`;
     tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.width = tempCanvas.width;
-    canvas.height = tempCanvas.height;
-    ctx.drawImage(tempCanvas, 0, 0);
-    ctx.drawImage(img, (tempCanvas.width-originWidth) / 2, (tempCanvas.height-originalHeight) / 2);
+    // canvas.width = tempCanvas.width;
+    // canvas.height = tempCanvas.height;
+    // ctx.drawImage(tempCanvas, 0, 0);
+    // ctx.drawImage(img, (tempCanvas.width-originWidth) / 2, (tempCanvas.height-originalHeight) / 2);
+
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    ctx.drawImage(tempCanvas,(tempCanvas.width-newWidth) / 2, (tempCanvas.height-newHeight) / 2,newWidth,newHeight,0,0,newWidth,newHeight);
+    ctx.drawImage(img, (newWidth-originWidth) / 2, (newHeight-originalHeight) / 2);
+
     
 }
 
@@ -139,8 +151,8 @@ function addDominantColorBackground() {
     const dominantColor = Object.keys(colorCounts).reduce((a, b) => (colorCounts[a] > colorCounts[b] ? a : b)).split(',');
     const [r, g, b] = dominantColor.map(Number);
 
-    const newWidth = canvas.width + borderSize;
-    const newHeight = canvas.height + borderSize;
+    // const newWidth = canvas.width + borderSize;
+    // const newHeight = canvas.height + borderSize;
 
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
@@ -149,7 +161,7 @@ function addDominantColorBackground() {
 
     tempCtx.fillStyle = `rgb(${r},${g},${b})`;
     tempCtx.fillRect(0, 0, newWidth, newHeight);
-    tempCtx.drawImage(canvas, borderSize/2, borderSize/2);
+    tempCtx.drawImage(canvas, (newWidth-img.width)/2, (newHeight-img.height)/2);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.width = newWidth;
