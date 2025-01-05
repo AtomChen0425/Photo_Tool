@@ -19,64 +19,112 @@
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
       border-radius: 8px;
     }
-        .controls {
-            margin: 20px;
-        }
+    /* Wrapper to hold both controls side by side */
+  .controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adjust space between the control sets */
+  }
+
+  /* Style for each control group */
+  .controls {
+    flex: 2; /* Allow each controls set to take up equal space */
+  }
+
+  .control-group {
+    flex: 1 1 200px;
+    display: flex; /* Flexbox to arrange label and input side by side */
+    margin-bottom: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  label {
+    width: 150px; /* Adjust width as needed */
+    margin-right: 10px; /* Space between label and input */
+    display: block;
+  }
+
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
     </style>
 </head>
 <body>
     <h1>图片背景处理</h1>
-    <input type="file" id="imageUploader" accept="image/*">
+    
     <div class="controls">
-        <label>
-            New width (px):
+        <div class="control-group">
+            <label for="newWidth">New width (px):</label>
             <input type="number" id="newWidth" value="7000" min="0" max="100000" step="100">
-        </label>
-        <label>
-            New Height (px):
+        </div>
+        <div class="control-group">
+            <label for="newHeight">New Height (px):</label>
             <input type="number" id="newHeight" value="7000" min="0" max="100000" step="100">
-        </label>
-        <label>
-            Border Color:
+        </div>
+        <div class="control-group">
+            <label for="borderColor">Border Color:</label>
             <input type="color" id="borderColor" value="#ffffff">
-        </label>
-        <label>
-            Border Radius (px):
+        </div>
+        <div class="control-group">
+            <label for="borderRadius">Border Radius (px):</label>
             <input type="number" id="borderRadius" value="40" min="0" max="100" step="1">
-        </label>
-        <button id="addWhiteBorder">添加自定义颜色边框</button>
-        <button id="addBlurredBackground">添加模糊背景</button>
-        <button id="addDominantColor">添加主色背景</button>
-        <button id="saveImage">保存图片</button>
+        </div>
     </div>
+   
     <h1>Image Parameter</h1>
-    <form id="parameterForm">
-        <label for="lensModel">Lens Model</label>
-        <input type="text" id="lensModel" name="lensModel" placeholder="e.g., Canon EF 50mm f/1.8" required>
-
-        <label for="model">Camera Model</label>
-        <input type="text" id="model" name="model" placeholder="e.g., Canon EOS 5D Mark IV" required>
-
-        <label for="focalLength">Focal Length (mm)</label>
-        <input type="number" step="0.1" id="focalLength" name="focalLength" placeholder="e.g., 50" required>
-
-        <label for="fNumber">F-Number</label>
-        <input type="number" step="0.1" id="fNumber" name="fNumber" placeholder="e.g., 1.8" required>
-
-        <label for="exposureTime">Exposure Time (s)</label>
-        <input type="number" step="0.001" id="exposureTime" name="exposureTime" placeholder="e.g., 0.01" required>
-
-        <label for="isoSpeedRatings">ISO Speed Ratings</label>
-        <input type="number" id="isoSpeedRatings" name="isoSpeedRatings" placeholder="e.g., 100" required>
-
-        <label for="make">Camera Make</label>
-        <input type="text" id="make" name="make" placeholder="e.g., Canon" required>
-
-        <label for="dateTimeOriginal">Date and Time</label>
-        <input type="datetime-local" id="dateTimeOriginal" name="dateTimeOriginal" required>
-        <button type="button" onclick="generateImage()">生成参数背景</button>
-    </form>
-    <canvas id="canvas" width="50%"></canvas>
+        <div class="controls">
+            <form id="parameterForm">
+            <div class="control-group">
+                <label for="lensModel">Lens Model</label>
+                <input type="text" id="lensModel" name="lensModel" placeholder="e.g., Canon EF 50mm f/1.8" required>
+            </div>
+            <div class="control-group">
+                <label for="model">Camera Model</label>
+                <input type="text" id="model" name="model" placeholder="e.g., Canon EOS 5D Mark IV" required>
+            </div>
+            <div class="control-group">
+                <label for="focalLength">Focal Length (mm)</label>
+                <input type="number" step="0.1" id="focalLength" name="focalLength" placeholder="e.g., 50" required>
+            </div>
+            <div class="control-group">
+                <label for="fNumber">F-Number</label>
+                <input type="number" step="0.1" id="fNumber" name="fNumber" placeholder="e.g., 1.8" required>
+            </div>
+            <div class="control-group">
+                <label for="exposureTime">Exposure Time (s)</label>
+                <input type="number" step="0.001" id="exposureTime" name="exposureTime" placeholder="e.g., 0.01" required>
+            </div>
+            <div class="control-group">
+                <label for="isoSpeedRatings">ISO Speed Ratings</label>
+                <input type="number" id="isoSpeedRatings" name="isoSpeedRatings" placeholder="e.g., 100" required>
+            </div>
+            <div class="control-group">
+                <label for="make">Camera Make</label>
+                <input type="text" id="make" name="make" placeholder="e.g., Canon" required>
+            </div>
+            <div class="control-group">
+                <label for="dateTimeOriginal">Date and Time</label>
+                <input type="datetime-local" id="dateTimeOriginal" name="dateTimeOriginal" required>
+            </div>
+        </form>
+        </div>
+        <div class="buttons">
+            <input type="file" id="imageUploader" accept="image/*">
+            <button id="addWhiteBorder">添加自定义颜色边框</button>
+            <button id="addBlurredBackground">添加模糊背景</button>
+            <button id="addDominantColor">添加主色背景</button>
+            
+            <button type="button" onclick="generateImage()">生成参数背景</button>
+            <button id="saveImage">保存图片</button>
+        </div>
+    <canvas id="canvas" width="500" height="500"></canvas>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
 </body>

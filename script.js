@@ -25,7 +25,7 @@ borderColorInput.addEventListener('input', () => {
   borderRadiusInput.addEventListener('input', () => {
     borderRadius = Number(borderRadiusInput.value);
   });
-let img = new Image();
+var img;
 const resetImage = () => {
     if (img.src) {
         canvas.width = img.width;
@@ -37,6 +37,7 @@ const resetImage = () => {
 imageUploader.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
+        img = new Image();
         const reader = new FileReader();
         reader.onload = (e) => {
             img.src = e.target.result;
