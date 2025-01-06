@@ -225,17 +225,19 @@ function generateImage() {
     const width = canvas.width;
     const height = canvas.height;
     const watermarkHeight = Math.ceil(Math.min(width, height) * 0.1);
-    const self_adative_roit=Math.ceil(width*height/(3000*6000)*0.4)
-    canvas.width = width;
-    canvas.height = height + watermarkHeight;
-
-    // Draw original image
-    ctx.drawImage(img, 0, 0);
-
+    const background_borderSize = Math.ceil(Math.max(width, height) * 0.05);
+    const self_adative_roit=Math.ceil(width*height/(4000*5000)*0.4)
+    canvas.width = width+background_borderSize;
+    canvas.height = height + watermarkHeight+background_borderSize/2;
+    
     // Draw watermark background
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, height, width, watermarkHeight);
+    // ctx.fillRect(0, height, width, watermarkHeight);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Draw original image
+    ctx.drawImage(img, background_borderSize/2, background_borderSize/2);
 
+    
     // Draw text parameters
     const boldsize= Math.floor(100*self_adative_roit);
     const regularsize=Math.floor(80*self_adative_roit);
@@ -244,23 +246,32 @@ function generateImage() {
     ctx.font = boldFont;
     ctx.fillStyle = 'black';
 
-    ctx.fillText(parameters.LensModel, Math.floor(watermarkHeight*0.2), height +  Math.floor(watermarkHeight*0.35));
+    ctx.fillText(
+        parameters.LensModel,
+        Math.floor(watermarkHeight*0.2)+background_borderSize/2, 
+        height +  Math.floor(watermarkHeight*0.35)+background_borderSize/2
+    );
     const shooting_parameter=`${parameters.FocalLength}mm f/${parameters.FNumber} ${parameters.ExposureTime}s ISO${parameters.ISOSpeedRatings}`;
     const shooting_parameter_text_width= ctx.measureText(shooting_parameter).width
     ctx.fillText(
         shooting_parameter,
-        width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2),
-        Math.floor(  height +  watermarkHeight*0.35)
+        canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2,
+        Math.floor(  height +  watermarkHeight*0.35)+background_borderSize/2
     );
 
     ctx.font = regularFont;
     ctx.fillStyle = 'gray';
-    ctx.fillText(parameters.Model, Math.floor(watermarkHeight*0.2), height + watermarkHeight/1.5+ 10* self_adative_roit);
+    ctx.fillText(
+        parameters.Model, 
+        Math.floor(watermarkHeight*0.2)+background_borderSize/2, 
+        height + watermarkHeight/1.5+ 10* self_adative_roit+background_borderSize/2
+    );
     const shooting_time_text_width= ctx.measureText(parameters.DateTimeOriginal).width
     ctx.fillText(
         parameters.DateTimeOriginal.replace('T', ' '), 
-        width-shooting_time_text_width-Math.floor(watermarkHeight*0.2), 
-        height + watermarkHeight/1.5+ 10* self_adative_roit);
+        canvas.width-shooting_time_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2, 
+        height + watermarkHeight/1.5+ 10* self_adative_roit + background_borderSize/2
+    );
 
     // Example logo (Replace with dynamic logo handling if needed)
     const logo = new Image();
@@ -271,7 +282,11 @@ function generateImage() {
         const logoWidth = logo.width * scale;
         const logoHeight = logo.height * scale;
     
-        ctx.drawImage(logo, width - shooting_parameter_text_width - Math.floor(70*self_adative_roit) -Math.floor(watermarkHeight*0.2)-Math.floor(logoWidth), height + Math.floor(watermarkHeight *0.2) , logoWidth, logoHeight);
+        ctx.drawImage(logo,
+            canvas.width - shooting_parameter_text_width - Math.floor(70*self_adative_roit) -Math.floor(watermarkHeight*0.2)-Math.floor(logoWidth)-background_borderSize/2,
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5 ,
+            logoWidth,
+            logoHeight);
         console.log('draw logo')
         console.log(logo.src)
         result=canvasToImage()
