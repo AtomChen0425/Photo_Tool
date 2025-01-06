@@ -277,9 +277,9 @@ function generateImage() {
 
     ctx.beginPath(); 
     ctx.beginPath();
-    ctx.moveTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-20*self_adative_roit,
+    ctx.moveTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-30*self_adative_roit,
             height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5); // 起点坐标
-    ctx.lineTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-20*self_adative_roit,
+    ctx.lineTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-30*self_adative_roit,
             height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5+Math.floor(watermarkHeight *0.65)); // 终点坐标
     ctx.stroke(); 
     // // Draw watermark background
