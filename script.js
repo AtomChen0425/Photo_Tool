@@ -237,8 +237,10 @@ function generateImage() {
     ctx.fillRect(0, height, width, watermarkHeight);
 
     // Draw text parameters
-    const boldFont = "bold 100px Arial";
-    const regularFont = "80px Arial";
+    const boldsize= Math.floor(100*self_adative_roit);
+    const regularsize=Math.floor(80*self_adative_roit);
+    const boldFont = `bold ${boldsize}px Arial`;
+    const regularFont = `${regularsize}px Arial`;
     ctx.font = boldFont;
     ctx.fillStyle = 'black';
 
