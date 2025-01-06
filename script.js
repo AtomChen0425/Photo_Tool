@@ -96,16 +96,14 @@ document.getElementById('saveImage').addEventListener('click', () => {
     link.click();
 });
 function canvasToImage() {
-    //新Image对象，可以理解为DOM
+
     var image1 = new Image();
-    // canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持
-    // 指定格式 PNG
     image1.src = canvas.toDataURL("image/jpeg", 1.0);
     let code = document.getElementById("imageContainer")
     while (code.firstChild) {
         code.removeChild(code.firstChild);
     }
-    code.appendChild(image1);//img加入到要插入的容器id
+    code.appendChild(image1);
     return image1;
 }
 function addWhiteBorder() {
