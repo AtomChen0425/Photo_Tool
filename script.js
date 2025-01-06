@@ -269,10 +269,27 @@ function generateImage() {
     const shooting_time_text_width= ctx.measureText(parameters.DateTimeOriginal).width
     ctx.fillText(
         parameters.DateTimeOriginal.replace('T', ' '), 
-        canvas.width-shooting_time_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2, 
+        canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2, 
         height + watermarkHeight/1.5+ 10* self_adative_roit + background_borderSize/2
     );
+    ctx.strokeStyle = '#808080'; 
+    ctx.lineWidth = 10*self_adative_roit;
 
+    ctx.beginPath(); 
+    ctx.beginPath();
+    ctx.moveTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-20*self_adative_roit,
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5); // 起点坐标
+    ctx.lineTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-20*self_adative_roit,
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5+Math.floor(watermarkHeight *0.65)); // 终点坐标
+    ctx.stroke(); 
+    // // Draw watermark background
+    // ctx.fillStyle = 'gray';
+    // // ctx.fillRect(0, height, width, watermarkHeight);
+    // ctx.fillRect(
+    //     canvas.width-shooting_parameter-Math.floor(watermarkHeight*0.2)-background_borderSize/2-50*self_adative_roit,
+    //     height +  Math.floor(watermarkHeight*0.35)+background_borderSize/2 +50*self_adative_roit,
+    //     canvas.width-shooting_parameter-Math.floor(watermarkHeight*0.2)-background_borderSize/2-50*self_adative_roit+20, 
+    //     canvas.height -50*self_adative_roit);
     // Example logo (Replace with dynamic logo handling if needed)
     const logo = new Image();
     logo.crossOrigin = "anonymous";
