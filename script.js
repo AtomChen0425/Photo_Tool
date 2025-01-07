@@ -63,11 +63,16 @@ imageUploader.addEventListener('change', (event) => {
                         parameterDict.DateTimeOriginal = null; // 如果解析失败，设置为 null
                     }
                 }
+                var exposureTime1=parameterDict.ExposureTime;
+                if (exposureTime1 < 1 ) {
+                    exposureTime1 = `${parameterDict.ExposureTime.numerator}/${parameterDict.ExposureTime.denominator}`;
+                }
                 document.getElementById('lensModel').value = parameterDict.LensModel;
                 document.getElementById('model').value = parameterDict.Model;
                 document.getElementById('focalLength').value = parameterDict.FocalLength;
                 document.getElementById('fNumber').value = parameterDict.FNumber;
-                document.getElementById('exposureTime').value = parameterDict.ExposureTime;
+                // document.getElementById('exposureTime').value = parameterDict.ExposureTime;
+                document.getElementById('exposureTime').value = exposureTime1;
                 document.getElementById('isoSpeedRatings').value = parameterDict.ISOSpeedRatings;
                 document.getElementById('make').value = parameterDict.Make;
                 document.getElementById('dateTimeOriginal').value = parameterDict.DateTimeOriginal;
@@ -218,7 +223,7 @@ function generateImage() {
         Model: formData.get('model'),
         FocalLength: parseFloat(formData.get('focalLength')),
         FNumber: parseFloat(formData.get('fNumber')),
-        ExposureTime: parseFloat(formData.get('exposureTime')),
+        ExposureTime: formData.get('exposureTime'),
         ISOSpeedRatings: parseInt(formData.get('isoSpeedRatings')),
         Make: formData.get('make').split(' ')[0].toLowerCase(),
         DateTimeOriginal: formData.get('dateTimeOriginal'),
