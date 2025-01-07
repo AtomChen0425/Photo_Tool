@@ -51,7 +51,8 @@ imageUploader.addEventListener('change', (event) => {
                 result=canvasToImage()
                 parameterDict= await getImgExif(img);
                 console.log(parameterDict);
-                self_adative_roit=Math.ceil( img.width*img.height/(4000*5000)*0.4);
+                // self_adative_roit= img.width*img.height/(3000*6000);
+                self_adative_roit=Math.min(img.width, img.height)/3500;
                 if (parameterDict.DateTimeOriginal) {
                     const dateParts = parameterDict.DateTimeOriginal.split(' '); // 拆分日期和时间
                     if (dateParts.length === 2) {
@@ -70,8 +71,8 @@ imageUploader.addEventListener('change', (event) => {
                 document.getElementById('isoSpeedRatings').value = parameterDict.ISOSpeedRatings;
                 document.getElementById('make').value = parameterDict.Make;
                 document.getElementById('dateTimeOriginal').value = parameterDict.DateTimeOriginal;
-                document.getElementById('Bold_font_size').value = Math.floor(100*self_adative_roit);
-                document.getElementById('Regular_font_size').value = Math.floor(80*self_adative_roit);
+                document.getElementById('Bold_font_size').value = Math.floor(90*self_adative_roit);
+                document.getElementById('Regular_font_size').value = Math.floor(70*self_adative_roit);
             };
         };
         reader.readAsDataURL(file);
@@ -251,14 +252,14 @@ function generateImage() {
     ctx.fillText(
         parameters.LensModel,
         Math.floor(watermarkHeight*0.2)+background_borderSize/2, 
-        height +  Math.floor(watermarkHeight*0.35)+background_borderSize/2
+        height +  Math.floor(watermarkHeight*0.4)+background_borderSize/2
     );
     const shooting_parameter=`${parameters.FocalLength}mm f/${parameters.FNumber} ${parameters.ExposureTime}s ISO${parameters.ISOSpeedRatings}`;
     const shooting_parameter_text_width= ctx.measureText(shooting_parameter).width
     ctx.fillText(
         shooting_parameter,
         canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2,
-        Math.floor(  height +  watermarkHeight*0.35)+background_borderSize/2
+        Math.floor(  height +  watermarkHeight*0.4)+background_borderSize/2
     );
 
     ctx.font = regularFont;
