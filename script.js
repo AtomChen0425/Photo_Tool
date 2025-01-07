@@ -276,9 +276,9 @@ function generateImage() {
     ctx.beginPath(); 
     ctx.beginPath();
     ctx.moveTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-30*self_adative_roit,
-            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5); // 起点坐标
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.2); // 起点坐标
     ctx.lineTo(canvas.width-shooting_parameter_text_width-Math.floor(watermarkHeight*0.2)-background_borderSize/2-30*self_adative_roit,
-            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5+Math.floor(watermarkHeight *0.65)); // 终点坐标
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.2+Math.floor(watermarkHeight *0.7)); // 终点坐标
     ctx.stroke(); 
     // // Draw watermark background
     // ctx.fillStyle = 'gray';
@@ -299,7 +299,7 @@ function generateImage() {
     
         ctx.drawImage(logo,
             canvas.width - shooting_parameter_text_width - Math.floor(70*self_adative_roit) -Math.floor(watermarkHeight*0.2)-Math.floor(logoWidth)-background_borderSize/2,
-            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2.5 ,
+            height + Math.floor(watermarkHeight *0.2)+background_borderSize/2 ,
             logoWidth,
             logoHeight);
         console.log('draw logo')
