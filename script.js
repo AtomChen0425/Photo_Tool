@@ -6,6 +6,7 @@ const borderSizeInput = document.getElementById('newWidth');
 const borderSizeInput2 = document.getElementById('newHeight');
 const borderColorInput = document.getElementById('borderColor');
 const borderRadiusInput = document.getElementById('borderRadius');
+var self_adative_roit;
 var result;
 var parameterDict;
 
@@ -50,6 +51,7 @@ imageUploader.addEventListener('change', (event) => {
                 result=canvasToImage()
                 parameterDict= await getImgExif(img);
                 console.log(parameterDict);
+                self_adative_roit=Math.ceil( img.width*img.height/(4000*5000)*0.4);
                 if (parameterDict.DateTimeOriginal) {
                     const dateParts = parameterDict.DateTimeOriginal.split(' '); // 拆分日期和时间
                     if (dateParts.length === 2) {
@@ -68,6 +70,8 @@ imageUploader.addEventListener('change', (event) => {
                 document.getElementById('isoSpeedRatings').value = parameterDict.ISOSpeedRatings;
                 document.getElementById('make').value = parameterDict.Make;
                 document.getElementById('dateTimeOriginal').value = parameterDict.DateTimeOriginal;
+                document.getElementById('Bold_font_size').value = Math.floor(100*self_adative_roit);
+                document.getElementById('Regular_font_size').value = Math.floor(80*self_adative_roit);
             };
         };
         reader.readAsDataURL(file);
@@ -224,7 +228,7 @@ function generateImage() {
     const height = canvas.height;
     const watermarkHeight = Math.ceil(Math.min(width, height) * 0.1);
     const background_borderSize = Math.ceil(Math.max(width, height) * 0.05);
-    const self_adative_roit=Math.ceil(width*height/(4000*5000)*0.4)
+    
     canvas.width = width+background_borderSize;
     canvas.height = height + watermarkHeight+background_borderSize/2;
     
@@ -237,8 +241,8 @@ function generateImage() {
 
     
     // Draw text parameters
-    const boldsize= Math.floor(100*self_adative_roit);
-    const regularsize=Math.floor(80*self_adative_roit);
+    const boldsize= Math.floor( formData.get("Bold_font_size"));
+    const regularsize=Math.floor(formData.get("Regular_font_size"));
     const boldFont = `bold ${boldsize}px Arial`;
     const regularFont = `${regularsize}px Arial`;
     ctx.font = boldFont;
