@@ -3,145 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image background processing</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        canvas {
-            max-width: 90vw; /* Maximum width: 90% of the viewport width */
-            max-height: 90vh; /* Maximum height: 90% of the viewport height */
-            object-fit: contain; /* Maintain aspect ratio */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-        div.imageContainer img{
-            max-width: 90vw; /* Maximum width: 90% of the viewport width */
-            max-height: 90vh; /* Maximum height: 90% of the viewport height */
-            object-fit: contain; /* Maintain aspect ratio */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-        /* Wrapper to hold both controls side by side */
-        .controls-wrapper {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px; /* Adjust space between the control sets */
-        }
-
-    /* Style for each control group */
-        .controls {
-            flex: 2; /* Allow each controls set to take up equal space */
-        }
-
-        .control-group {
-            flex: 1 1 200px;
-            display: flex; /* Flexbox to arrange label and input side by side */
-            margin-bottom: 15px;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-content: flex-end;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        label {
-            width: 150px; /* Adjust width as needed */
-            margin-right: 10px; /* Space between label and input */
-            display: block;
-        }
-
-
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-    </style>
+    <title>Photo Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1>Image background processing</h1>
-    
-    <div class="controls">
-        <div class="control-group">
-            <label for="newWidth">New width (px):</label>
-            <input type="number" id="newWidth" value="7000" min="0" max="100000" step="100">
+    <div class="page-container">
+        <h1>Image background processing</h1>
+        
+        <!-- 文件上传按钮 -->
+        <div class="buttons">
+            <div class="file-upload">
+                <label for="imageUploader" class="upload-btn">
+                    <i class="fas fa-camera btn-icon"></i> Upload Image
+                </label>
+                <input type="file" id="imageUploader" accept="image/*">
+            </div>
         </div>
-        <div class="control-group">
-            <label for="newHeight">New Height (px):</label>
-            <input type="number" id="newHeight" value="7000" min="0" max="100000" step="100">
+        
+        <!-- 尺寸和边框控制面板 -->
+        <div class="control-panel">
+            <div class="panel-title">Size and Border Settings</div>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="newWidth">New width (px)</label>
+                    <input type="number" id="newWidth" value="7000" min="0" max="100000" step="100">
+                </div>
+                <div class="control-group">
+                    <label for="newHeight">New Height (px)</label>
+                    <input type="number" id="newHeight" value="7000" min="0" max="100000" step="100">
+                </div>
+                <div class="control-group">
+                    <label for="borderColor">Border Color</label>
+                    <input type="color" id="borderColor" value="#ffffff">
+                </div>
+                <div class="control-group">
+                    <label for="borderRadius">Border Radius (px)</label>
+                    <input type="number" id="borderRadius" value="40" min="0" max="100" step="1">
+                </div>
+            </div>
         </div>
-        <div class="control-group">
-            <label for="borderColor">Border Color:</label>
-            <input type="color" id="borderColor" value="#ffffff">
+       
+        <!-- 相机参数控制面板 - LCD风格 -->
+        <div class="lcd-panel">
+            
+            <div class="lcd-header">
+                <div class="lcd-title">Av</div>
+                <div class="lcd-value" id="lcd-aperture">F4.5</div>
+                <div class="lcd-value" id="lcd-exposureTime">1/200 s</div>
+                <div class="lcd-value highlight" id="lcd-iso">ISO 1600</div>
+            </div>
+            
+            <div class="lcd-exposure-scale">
+                <span class="lcd-scale-marker">-3</span>
+                <span class="lcd-scale-marker">-2</span>
+                <span class="lcd-scale-marker">-1</span>
+                <span class="lcd-scale-marker">0</span>
+                <span class="lcd-scale-marker active">+1</span>
+                <span class="lcd-scale-marker">+2</span>
+                <span class="lcd-scale-marker">+3</span>
+            </div>
+            
+            <div class="lcd-grid">
+                <div class="lcd-item" id="lcd-item-focus">
+                    <div class="lcd-item-label">Focus mode</div>
+                    <div class="lcd-item-value">5×5</div>
+                </div>
+                <div class="lcd-item" id="lcd-item-wb">
+                    <div class="lcd-item-label">White balance</div>
+                    <div class="lcd-item-value">AWB</div>
+                </div>
+                <div class="lcd-item" id="lcd-item-quality">
+                    <div class="lcd-item-label">Quality</div>
+                    <div class="lcd-item-value">FINE</div>
+                </div>
+                <div class="lcd-item" id="lcd-item-format">
+                    <div class="lcd-item-label">Format</div>
+                    <div class="lcd-item-value">RAW</div>
+                </div>
+                <div class="lcd-item" id="lcd-item-grid">
+                    <div class="lcd-item-label">viewfinder-grid</div>
+                    <div class="lcd-item-value"><i class="fas fa-th"></i></div>
+                </div>
+                <div class="lcd-item" id="lcd-item-flash">
+                    <div class="lcd-item-label">Flash</div>
+                    <div class="lcd-item-value"><i class="fas fa-bolt"></i></div>
+                </div>
+                <div class="lcd-item active" id="lcd-item-mode">
+                    <div class="lcd-item-label">Mode</div>
+                    <div class="lcd-item-value">ONE SHOT</div>
+                </div>
+                <div class="lcd-item" id="lcd-item-timer">
+                    <div class="lcd-item-label">Timer</div>
+                    <div class="lcd-item-value"><i class="fas fa-clock"></i></div>
+                </div>
+                <div class="lcd-item" id="lcd-item-bracket">
+                    <div class="lcd-item-label">Bracket</div>
+                    <div class="lcd-item-value"><i class="fas fa-layer-group"></i></div>
+                </div>
+                <div class="lcd-item" id="lcd-item-stabilizer">
+                    <div class="lcd-item-label">Stabilizer</div>
+                    <div class="lcd-item-value"><i class="fas fa-hand-paper"></i></div>
+                </div>
+                <div class="lcd-item active" id="lcd-item-histogram">
+                    <div class="lcd-item-label">Histogram</div>
+                    <div class="lcd-item-value highlight"><i class="fas fa-chart-area"></i></div>
+                </div>
+                <div class="lcd-item" id="lcd-item-battery">
+                    <div class="lcd-item-label">Battery</div>
+                    <div class="lcd-item-value"><i class="fas fa-battery-three-quarters"></i></div>
+                </div>
+            </div>
+            
+            <div class="lcd-footer">
+                <div id="lcd-resolution">6000×4000</div>
+                <button class="toggle-btn" onclick="toggleForm()"><i class="fas fa-circle-info"></i></button>
+                <div id="lcd-shots-left">999+</div>
+            </div>
+            
+            <form id="parameterForm" style="display: none;">
+            <!-- 隐藏的表单元素，用于存储实际数据 -->
+                <label class="lcd-item-value highlight">Lens Model</label>
+                <input type="text" id="lensModel" name="lensModel" value="None">
+                <label class="lcd-item-value highlight">Camera Model</label>
+                <input type="text" id="model" name="model" value="Canon EOS 5D">
+                <label class="lcd-item-value highlight">Focal Length (mm)</label>
+                <input type="number" step="0.1" id="focalLength" name="focalLength" value="50">
+                <label class="lcd-item-value highlight">F-Number</label>
+                <input type="number" step="0.1" id="fNumber" name="fNumber" value="4.5">
+                <label class="lcd-item-value highlight">Exposure Time (s)</label>
+                <input type="text" id="exposureTime" name="exposureTime" value="1/125">
+                <label class="lcd-item-value highlight">ISO Speed Ratings</label>
+                <input type="number" id="isoSpeedRatings" name="isoSpeedRatings" value="1600">
+                <label class="lcd-item-value highlight">Camera Make</label>
+                <input type="text" id="make" name="make" value="Canon">
+                <label class="lcd-item-value highlight">Date and Time</label>
+                <input type="datetime-local" id="dateTimeOriginal" name="dateTimeOriginal">
+                <label class="lcd-item-value highlight">Bold font size</label>
+                <input type="number" id="Bold_font_size" name="Bold_font_size" value="90">
+                <label class="lcd-item-value highlight">Regular font size</label>
+                <input type="number" id="Regular_font_size" name="Regular_font_size" value="70">
+            </form>
         </div>
-        <div class="control-group">
-            <label for="borderRadius">Border Radius (px):</label>
-            <input type="number" id="borderRadius" value="40" min="0" max="100" step="1">
+        
+        <!-- 操作按钮 -->
+        <div class="buttons">
+            <button id="addWhiteBorder" class="btn">
+                <i class="fas fa-square-full btn-icon"></i>Add custom color border
+            </button>
+            <button id="addBlurredBackground" class="btn">
+                <i class="fas fa-blur btn-icon"></i>Add blurred background
+            </button>
+            <button id="addDominantColor" class="btn">
+                <i class="fas fa-palette btn-icon"></i>Add primary color background
+            </button>
+            <button type="button" onclick="generateImage()" class="btn btn-primary">
+                <i class="fas fa-camera-retro btn-icon"></i>Generating Parameter Background
+            </button>
+            <button id="saveImage" class="btn">
+                <i class="fas fa-download btn-icon"></i>Save
+            </button>
+        </div>
+        
+        <!-- 相机取景器/显示屏 - 移至底部 -->
+        <div class="viewfinder">
+            <div class="viewfinder-frame">
+                <div class="viewfinder-grid"></div>
+                <div class="viewfinder-center"></div>
+                <div class="viewfinder-corners">
+                    <div class="viewfinder-corner corner-top-left"></div>
+                    <div class="viewfinder-corner corner-top-right"></div>
+                    <div class="viewfinder-corner corner-bottom-left"></div>
+                    <div class="viewfinder-corner corner-bottom-right"></div>
+                </div>
+                <div class="imageContainer" id="imageContainer"></div>
+            </div>
+            <div class="camera-info">
+                <div class="camera-info-left">
+                    <div class="camera-info-item"><span class="camera-info-label">Camera:</span><span id="info-camera">undetected</span></div>
+                    <div class="camera-info-item"><span class="camera-info-label">Lens:</span><span id="info-lens">undetected</span></div>
+                </div>
+                <div class="camera-info-right">
+                    <div class="camera-info-item"><span class="camera-info-label">Parameter:</span><span id="info-settings">undetected</span></div>
+                    <div class="camera-info-item"><span class="camera-info-label">Time:</span><span id="info-time">undetected</span></div>
+                </div>
+            </div>
         </div>
     </div>
-   
-    <h1>Image Parameter</h1>
-        <div class="controls">
-            <form id="parameterForm">
-            <div class="control-group">
-                <label for="lensModel">Lens Model</label>
-                <input type="text" id="lensModel" name="lensModel" placeholder="e.g., Canon EF 50mm f/1.8" required>
-            </div>
-            <div class="control-group">
-                <label for="model">Camera Model</label>
-                <input type="text" id="model" name="model" placeholder="e.g., Canon EOS 5D Mark IV" required>
-            </div>
-            <div class="control-group">
-                <label for="focalLength">Focal Length (mm)</label>
-                <input type="number" step="0.1" id="focalLength" name="focalLength" placeholder="e.g., 50" required>
-            </div>
-            <div class="control-group">
-                <label for="fNumber">F-Number</label>
-                <input type="number" step="0.1" id="fNumber" name="fNumber" placeholder="e.g., 1.8" required>
-            </div>
-            <div class="control-group">
-                <label for="exposureTime">Exposure Time (s)</label>
-                <input type="text" id="exposureTime" name="exposureTime" placeholder="e.g., 1/125" required>
-            </div>
-            <div class="control-group">
-                <label for="isoSpeedRatings">ISO Speed Ratings</label>
-                <input type="number" id="isoSpeedRatings" name="isoSpeedRatings" placeholder="e.g., 100" required>
-            </div>
-            <div class="control-group">
-                <label for="make">Camera Make</label>
-                <input type="text" id="make" name="make" placeholder="e.g., Canon" required>
-            </div>
-            <div class="control-group">
-                <label for="dateTimeOriginal">Date and Time</label>
-                <input type="datetime-local" id="dateTimeOriginal" name="dateTimeOriginal" required>
-            </div>
-            <div class="control-group">
-                <label for="Bold_font_size">Bold font size</label>
-                <input type="number" id="Bold_font_size" name="Bold_font_size" required>
-            </div>
-            <div class="control-group">
-                <label for="Regular_font_size">Regular font size</label>
-                <input type="number" id="Regular_font_size" name="Regular_font_size" required>
-            </div>
-        </form>
-        </div>
-        <div class="buttons">
-            <input type="file" id="imageUploader" accept="image/*">
-            <button id="addWhiteBorder">Add custom color border</button>
-            <button id="addBlurredBackground">Add blurred background</button>
-            <button id="addDominantColor">Add primary color background</button>
-            
-            <button type="button" onclick="generateImage()">Generating Parameter Background</button>
-            <button id="saveImage">Save</button>
-        </div>
-    <!-- <canvas id="canvas" width="500" height="500"></canvas> -->
-    <div class="imageContainer" id="imageContainer"></div>
-    <script src="script.js"></script>
+    
+    <!-- 加载动画 -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- 隐藏的Canvas元素 -->
+    <canvas id="canvas" width="500" height="500" style="display: none;"></canvas>
+    
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

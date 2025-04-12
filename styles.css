@@ -1,0 +1,638 @@
+/* 专业摄影风格的CSS样式 - 更新版 */
+:root {
+    --primary-color: #34495e;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --text-color: #2c3e50;
+    --light-gray: #bdc3c7;
+    --dark-gray: #7f8c8d;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --background-color: #ecf0f1;
+    --panel-background: #f5f7fa;
+    --lcd-background: #000000;
+    --lcd-text: #ffffff;
+    --lcd-highlight: #ffcc00;
+    --lcd-border: #333333;
+    --lcd-active: #ff9900;
+}
+
+body {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-image: linear-gradient(to bottom, #f5f7fa, #e4e7eb);
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 20px 0;
+    color: var(--accent-color);
+    text-align: center;
+    border-bottom: 1px solid var(--dark-gray);
+    padding-bottom: 10px;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* 相机取景器/显示屏样式 */
+.viewfinder {
+    position: relative;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: var(--primary-color);
+    border-radius: 15px;
+    box-shadow: var(--box-shadow);
+    border: 2px solid var(--dark-gray);
+    max-width: 95%;
+    order: 3; /* 将图像显示区域移到最下方 */
+}
+
+/* .viewfinder::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.7);
+    animation: blink 2s infinite;
+} */
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.viewfinder-frame {
+    position: relative;
+    border: 3px solid var(--dark-gray);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #000;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.viewfinder-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.2;
+    background-image: 
+        linear-gradient(to right, var(--light-gray) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--light-gray) 1px, transparent 1px);
+    background-size: 33.33% 33.33%;
+}
+
+.viewfinder-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.viewfinder-corners {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.viewfinder-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: rgba(255, 255, 255, 0.7);
+    border-style: solid;
+    border-width: 0;
+}
+
+.corner-top-left {
+    top: 10px;
+    left: 10px;
+    border-top-width: 2px;
+    border-left-width: 2px;
+}
+
+.corner-top-right {
+    top: 10px;
+    right: 10px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+}
+
+.corner-bottom-left {
+    bottom: 10px;
+    left: 10px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.corner-bottom-right {
+    bottom: 10px;
+    right: 10px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+}
+
+.imageContainer img, canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+/* 控制面板样式 */
+.control-panel {
+    background-color: var(--panel-background);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--light-gray);
+    order: 1; /* 控制面板放在上方 */
+}
+
+.panel-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+}
+
+.panel-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-color);
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+/* 更紧凑的控制面板布局 - 优化版 */
+.controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 四列布局 */
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 6px 8px;
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--secondary-color);
+}
+
+.control-group label {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+    color: var(--text-color);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.control-group input[type="text"],
+.control-group input[type="number"],
+.control-group input[type="datetime-local"] {
+    background-color: #ffffff;
+    border: 1px solid var(--light-gray);
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: var(--text-color);
+    font-size: 0.8rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    min-width: 0; /* 允许输入框缩小到比内容更小 */
+}
+
+.control-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+.control-group input[type="color"] {
+    width: 100%;
+    height: 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* LCD屏幕风格的相机参数设置 */
+.lcd-panel {
+    background-color: var(--lcd-background);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--box-shadow);
+    border: 2px solid var(--lcd-border);
+    order: 1;
+    font-family: 'Digital-7', 'Courier New', monospace;
+}
+
+.lcd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--lcd-border);
+    padding-bottom: 10px;
+}
+
+.lcd-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--lcd-text);
+    text-transform: uppercase;
+}
+
+.lcd-value {
+    background-color: var(--lcd-border);
+    color: var(--lcd-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 1px solid #444;
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+}
+
+.lcd-value.highlight {
+    color: var(--lcd-highlight);
+}
+
+.lcd-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.lcd-item {
+    background-color: var(--lcd-border);
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 8px 5px;
+    text-align: center;
+    color: var(--lcd-text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50px;
+}
+
+.lcd-item:hover {
+    background-color: #444;
+}
+
+.lcd-item.active {
+    border-color: var(--lcd-active);
+    box-shadow: 0 0 5px var(--lcd-active);
+}
+
+.lcd-item-label {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.lcd-item-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.lcd-item-value.highlight {
+    color: var(--lcd-highlight);
+}
+
+.lcd-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.lcd-exposure-scale {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--lcd-border);
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 10px;
+    color: var(--lcd-text);
+    font-size: 0.9rem;
+    grid-column: span 6;
+}
+
+.lcd-scale-marker {
+    margin: 0 2px;
+}
+
+.lcd-scale-marker.active {
+    color: var(--lcd-highlight);
+}
+
+.lcd-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-top: 1px solid var(--lcd-border);
+    padding-top: 10px;
+    color: var(--lcd-text);
+    font-size: 0.8rem;
+}
+
+/* 按钮样式 */
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 800px;
+    order: 2; /* 按钮放在中间 */
+}
+
+.btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid transparent;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: #c0392b;
+}
+
+.btn-icon {
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+.toggle-btn {
+    padding: 8px 16px;
+    border: none;
+    background-color: #333;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+background-color: #555;
+}
+/* 文件上传按钮样式 */
+.file-upload {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    font-size: 100px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.upload-btn {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--light-gray);
+    text-align: center;
+}
+
+.upload-btn:hover {
+    background-color: #2980b9;
+    border-color: var(--accent-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .controls {
+        grid-template-columns: repeat(2, 1fr); /* 平板设备上改为两列 */
+    }
+    
+    .lcd-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        grid-template-columns: 1fr; /* 手机设备上改为单列 */
+    }
+    
+    .lcd-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .lcd-exposure-scale {
+        grid-column: span 2;
+    }
+}
+
+/* 相机参数显示样式 */
+.camera-info {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--light-gray);
+}
+
+.camera-info-left, .camera-info-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.camera-info-item {
+    margin: 2px 0;
+}
+
+.camera-info-label {
+    color: var(--accent-color);
+    margin-right: 5px;
+}
+
+/* 加载动画 */
+.loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading.active {
+    display: flex;
+}
+
+/* 工具提示 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--dark-gray);
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 设置页面元素顺序 */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+/* 数字字体 */
+@font-face {
+    font-family: 'Digital-7';
+    src: url('https://cdn.jsdelivr.net/npm/digital-7-font@1.0.0/digital-7.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
